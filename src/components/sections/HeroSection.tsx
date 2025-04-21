@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from "react";
 import { AnimatedButton } from "../ui/AnimatedButton";
 
@@ -38,22 +37,21 @@ export const HeroSection = () => {
       ref={sectionRef}
       className="relative w-full h-screen overflow-hidden bg-zephyr-dark flex items-center"
       style={{ 
-        backgroundImage: "url('/lovable-uploads/2e51937f-26b1-43eb-9676-5651c6bb10c3.png')", 
+        backgroundImage: "url('/lovable-uploads/734f4928-77ff-4fd9-ada7-07c61829e150.png')", 
         backgroundSize: "cover", 
         backgroundPosition: "center"
       }}
     >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-zephyr-dark/90 to-transparent pointer-events-none"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-zephyr-dark/80 to-transparent pointer-events-none"></div>
       
       <div className="zephyr-container relative z-10 flex flex-col justify-center h-full pt-20">
         <div className="max-w-2xl">
-          <h1 className="heading-xl text-white mb-6 leading-none hero-heading slide-in-left" style={{ "--delay": 0.2 } as React.CSSProperties}>
+          <h1 className="font-playfair text-white mb-6 leading-none hero-heading slide-in-left text-6xl md:text-8xl" style={{ "--delay": 0.2 } as React.CSSProperties}>
             Top-tier <br />
             Electric Bikes
           </h1>
           
-          <p className="text-xl md:text-2xl text-white/80 mb-8 hero-subtext slide-in-left" style={{ "--delay": 0.4 } as React.CSSProperties}>
+          <p className="font-playfair text-xl md:text-2xl text-white/80 mb-8 hero-subtext slide-in-left" style={{ "--delay": 0.4 } as React.CSSProperties}>
             From $1590
           </p>
           
@@ -65,7 +63,6 @@ export const HeroSection = () => {
         </div>
       </div>
 
-      {/* Video preview button */}
       <div className="absolute bottom-16 right-8 md:right-16 slide-in-bottom" style={{ "--delay": 1 } as React.CSSProperties}>
         <button className="relative w-48 md:w-56 h-24 md:h-28 rounded-lg overflow-hidden group">
           <div 
