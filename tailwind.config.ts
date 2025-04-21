@@ -52,6 +52,14 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				zephyr: {
+					DEFAULT: '#8A7A66', // Main brand color (beige/tan)
+					dark: '#2A2520',    // Dark brown/black
+					light: '#F5F2EE',   // Light beige
+					cream: '#E5DFD7',   // Cream color
+					accent: '#FFFFFF',  // White accent
+					muted: '#C0B8AD',   // Muted text
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
