@@ -19,7 +19,7 @@ const products: Product[] = [
     name: "Zephyr Velocity",
     category: "Urban Commuter",
     price: 1599,
-    image: "https://images.unsplash.com/photo-1593764592116-bfb2a97c642a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1936&q=80",
+    image: "https://images.unsplash.com/photo-1571333250630-f0369566e359?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80",
     features: ["350W Motor", "60 Mile Range", "Easy Folding Design"],
     badge: "Best Seller"
   },
@@ -28,7 +28,7 @@ const products: Product[] = [
     name: "Zephyr Terrain",
     category: "Off-road",
     price: 2199,
-    image: "https://images.unsplash.com/photo-1598983468326-be5352a532be?ixlib=rb-4.0.3&auto=format&fit=crop&w=1636&q=80",
+    image: "https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1908&q=80",
     features: ["500W Motor", "Full Suspension", "All-terrain Tires"],
   },
   {
@@ -36,7 +36,7 @@ const products: Product[] = [
     name: "Zephyr Cargo",
     category: "Utility",
     price: 2499,
-    image: "https://images.unsplash.com/photo-1621448835672-3a984a57c01f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1664&q=80",
+    image: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80",
     features: ["450W Motor", "High Capacity Rack", "Extended Battery Life"],
   },
 ];
@@ -44,6 +44,7 @@ const products: Product[] = [
 export const ProductSection = () => {
   const [activeProduct, setActiveProduct] = useState<string>(products[0].id);
   const productRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -61,6 +62,10 @@ export const ProductSection = () => {
       }
     );
 
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
     productRefs.current.forEach((product) => {
       if (product) {
         observer.observe(product);
@@ -68,6 +73,9 @@ export const ProductSection = () => {
     });
 
     return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
       productRefs.current.forEach((product) => {
         if (product) {
           observer.unobserve(product);
@@ -77,24 +85,24 @@ export const ProductSection = () => {
   }, []);
 
   return (
-    <section className="py-24 bg-zephyr-cream">
+    <section ref={sectionRef} className="py-24 bg-zephyr-cream">
       <div className="zephyr-container">
         <div className="text-center mb-16">
-          <h2 className="heading-md text-zephyr-dark mb-4 slide-in-bottom" style={{ "--delay": 0.1 } as React.CSSProperties}>
+          <h2 className="heading-md font-playfair text-zephyr-dark mb-4 slide-in-bottom" style={{ "--delay": 0.1 } as React.CSSProperties}>
             Featured Electric Bikes
           </h2>
-          <p className="text-zephyr-muted text-lg max-w-2xl mx-auto slide-in-bottom" style={{ "--delay": 0.2 } as React.CSSProperties}>
+          <p className="text-zephyr-muted text-lg max-w-2xl mx-auto slide-in-bottom font-playfair" style={{ "--delay": 0.2 } as React.CSSProperties}>
             Discover our most popular models, designed for every type of rider and journey.
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-8 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {products.map((product, index) => (
             <div
               key={product.id}
               ref={(el) => (productRefs.current[index] = el)}
               className={cn(
-                "bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col opacity-0",
+                "bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col opacity-0 transform hover:scale-[1.03] hover:-translate-y-1",
                 activeProduct === product.id && "ring-2 ring-zephyr-dark ring-opacity-10"
               )}
               style={{ animationDelay: `${(index + 3) * 150}ms` }}
@@ -110,12 +118,13 @@ export const ProductSection = () => {
                   src={product.image}
                   alt={product.name}
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                  loading="lazy"
                 />
               </div>
               <div className="p-6 flex-1 flex flex-col">
                 <div className="mb-4">
-                  <span className="text-sm font-medium text-zephyr-muted block mb-1">{product.category}</span>
-                  <h3 className="text-xl font-semibold text-zephyr-dark">{product.name}</h3>
+                  <span className="text-sm font-medium text-zephyr-muted font-playfair block mb-1">{product.category}</span>
+                  <h3 className="text-xl font-semibold text-zephyr-dark font-playfair">{product.name}</h3>
                 </div>
                 <ul className="space-y-2 mb-6 flex-1">
                   {product.features.map((feature) => (
@@ -140,8 +149,8 @@ export const ProductSection = () => {
                   ))}
                 </ul>
                 <div className="flex items-center justify-between mt-auto">
-                  <span className="text-lg font-bold text-zephyr-dark">${product.price}</span>
-                  <AnimatedButton to={`/product/${product.id}`} className="!py-2 !px-4" arrow={false}>
+                  <span className="text-lg font-bold text-zephyr-dark font-playfair">${product.price}</span>
+                  <AnimatedButton to={`/product/${product.id}`} className="!py-2 !px-4 hover:scale-105 transition-transform" arrow={false}>
                     View Details
                   </AnimatedButton>
                 </div>

@@ -83,6 +83,10 @@ export const FeatureSection = () => {
       }
     );
 
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
     featuresRef.current.forEach((feature) => {
       if (feature) {
         observer.observe(feature);
@@ -90,11 +94,57 @@ export const FeatureSection = () => {
     });
 
     return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+      
       featuresRef.current.forEach((feature) => {
         if (feature) {
           observer.unobserve(feature);
         }
       });
+    };
+  }, []);
+
+  // Mouse follow effect for feature cards
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      featuresRef.current.forEach(feature => {
+        if (!feature) return;
+        
+        const rect = feature.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Only apply effect if mouse is over the element
+        if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          
+          // Calculate rotation based on mouse position
+          const rotateY = ((x - centerX) / centerX) * 5; // Max 5 degrees
+          const rotateX = ((centerY - y) / centerY) * 5; // Max 5 degrees
+          
+          feature.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+          feature.style.transition = 'transform 0.1s';
+        }
+      });
+    };
+    
+    const handleMouseLeave = () => {
+      featuresRef.current.forEach(feature => {
+        if (!feature) return;
+        feature.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+        feature.style.transition = 'transform 0.5s';
+      });
+    };
+    
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseleave', handleMouseLeave);
+    
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, []);
 
@@ -105,10 +155,10 @@ export const FeatureSection = () => {
     >
       <div className="zephyr-container">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="heading-md text-zephyr-dark mb-4 slide-in-bottom" style={{ "--delay": 0.1 } as React.CSSProperties}>
+          <h2 className="heading-md text-zephyr-dark mb-4 slide-in-bottom font-playfair" style={{ "--delay": 0.1 } as React.CSSProperties}>
             Experience the Zephyr Difference
           </h2>
-          <p className="text-zephyr-muted text-lg slide-in-bottom" style={{ "--delay": 0.2 } as React.CSSProperties}>
+          <p className="text-zephyr-muted text-lg slide-in-bottom font-playfair" style={{ "--delay": 0.2 } as React.CSSProperties}>
             Our electric bikes combine cutting-edge technology with elegant design to create 
             the perfect riding experience.
           </p>
@@ -121,16 +171,19 @@ export const FeatureSection = () => {
               ref={(el) => {
                 if (el) featuresRef.current[index] = el;
               }}
-              className="bg-zephyr-light p-8 rounded-xl opacity-0"
-              style={{ animationDelay: `${(index + 1) * 150}ms` }}
+              className="bg-zephyr-light p-8 rounded-xl opacity-0 transform hover:shadow-lg transition-all duration-300 cursor-pointer"
+              style={{ 
+                animationDelay: `${(index + 1) * 150}ms`,
+                transformStyle: 'preserve-3d'
+              }}
             >
-              <div className="bg-white w-12 h-12 rounded-lg flex items-center justify-center mb-6 text-zephyr-dark">
+              <div className="bg-white w-12 h-12 rounded-lg flex items-center justify-center mb-6 text-zephyr-dark shadow-sm">
                 {feature.icon}
               </div>
-              <h3 className="text-xl font-semibold text-zephyr-dark mb-3">
+              <h3 className="text-xl font-semibold text-zephyr-dark mb-3 font-playfair">
                 {feature.title}
               </h3>
-              <p className="text-zephyr-muted">
+              <p className="text-zephyr-muted font-playfair">
                 {feature.description}
               </p>
             </div>
